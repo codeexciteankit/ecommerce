@@ -489,19 +489,49 @@ function showRegister() {
   if (registerForm) registerForm.classList.remove("hidden");
 }
 
-function handleLogin(event) {
+async function handleRegister(event) {
   event.preventDefault();
-  currentUser = { name: "John Doe", email: "john@example.com" };
-  toggleAccount();
-  showNotification("Successfully logged in!", "success");
+  const name = event.target.querySelector('input[type="text"]').value;
+  const email = event.target.querySelector('input[type="email"]').value;
+  const password = event.target.querySelector('input[type="password"]').value;
+
+  const res = await fetch("http://localhost:5000/api/users/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, email, password }),
+  });
+
+  const data = await res.json();
+  if (res.ok) {
+    showNotification("Account created successfully!", "success");
+    currentUser = { name, email };
+    toggleAccount();
+  } else {
+    showNotification(data.error || "Error creating account", "error");
+  }
 }
 
-function handleRegister(event) {
+async function handleLogin(event) {
   event.preventDefault();
-  currentUser = { name: "New User", email: "user@example.com" };
-  toggleAccount();
-  showNotification("Account created successfully!", "success");
+  const email = event.target.querySelector('input[type="email"]').value;
+  const password = event.target.querySelector('input[type="password"]').value;
+
+  const res = await fetch("http://localhost:5000/api/users/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
+  });
+
+  const data = await res.json();
+  if (res.ok) {
+    showNotification("Login successful!", "success");
+    currentUser = data.user;
+    toggleAccount();
+  } else {
+    showNotification(data.message, "error");
+  }
 }
+
 
 function proceedToCheckout() {
   if (cart.length === 0) {
