@@ -66,12 +66,6 @@ Before you begin, ensure you have the following installed:
    MONGO_URI=mongodb://localhost:27017/modernshop
    PORT=5000
    ```
-   
-   **For MongoDB Atlas (Cloud):**
-   ```
-   MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/modernshop?retryWrites=true&w=majority
-   PORT=5000
-   ```
 
 4. **Start MongoDB** (if using local installation)
    ```bash
